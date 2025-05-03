@@ -1,8 +1,8 @@
 package com.board.productbacklogitem.command.aggregate;
 
-import com.board.productbacklogitem.command.commands.PbiCreatedCommand;
-import com.board.productbacklogitem.command.commands.PbiDeleteCommand;
-import com.board.productbacklogitem.command.commands.PbiUpdateCommand;
+import com.board.productbacklogitem.command.command.PbiCreatedCommand;
+import com.board.productbacklogitem.command.command.PbiDeleteCommand;
+import com.board.productbacklogitem.command.command.PbiUpdateCommand;
 import com.board.productbacklogitem.command.event.PbiCreatedEvent;
 import com.board.productbacklogitem.command.event.PbiDeletedEvent;
 import com.board.productbacklogitem.command.event.PbiUpdatedEvent;
@@ -43,14 +43,19 @@ public class PbiAggregate {
     public PbiAggregate() {
 
     }
-
     /**
+     * Command handler constructor used to create a new Product Backlog Item (PBI) aggregate.
      *
-     * @param createCommand - Create Command Model
-     * @return Create CreatePbiEvent and send
+     * This constructor is triggered when a {@link PbiCreatedCommand} is received **and no existing aggregate**
+     * with the same ID is found in the Event Store.
+     *
+     * In Axon Framework, constructor-based command handlers are used **only for creating new aggregates**.
+     * This is where you "initialize" your aggregate by applying a creation event.
+     *
+     * @param createCommand the command carrying the initial state of the aggregate to be created
      */
     @CommandHandler
-    public void handle(PbiCreatedCommand createCommand) {
+    public PbiAggregate(PbiCreatedCommand createCommand) {
         PbiCreatedEvent createdEvent = new PbiCreatedEvent();
         BeanUtils.copyProperties(createCommand, createdEvent);
         AggregateLifecycle.apply(createdEvent);

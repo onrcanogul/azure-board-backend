@@ -1,14 +1,29 @@
 spring:
   application:
     name: ProductBacklogItem
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pbi-db
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 axon:
-  eventhandling:
-    processors:
-      account-group:
-        mode: subscribing
   axonserver:
+    enabled: true
     servers: localhost:8124
+
 

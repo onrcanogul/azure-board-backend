@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: pbi-db
+    environment:
+      POSTGRES_DB: pbi-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - pbi-net
+
+  axonserver:
+    image: axoniq/axonserver:latest
+    container_name: axonserver
+    ports:
+      - "8124:8124"   # gRPC (Axon client bağlantısı)
+      - "8024:8024"   # Web UI
+    volumes:
+      - axonserver-data:/axonserver/data
+      - axonserver-events:/axonserver/events
+      - axonserver-config:/axonserver/config
+    environment:
+      AXONSERVER_NAME: "axonserver-node"
+      AXONSERVER_HOSTNAME: "axonserver-node"
+      AXONSERVER_DEVMODE_ENABLED: "true"
+    restart: unless-stopped
+    networks:
+      - pbi-net
+
+volumes:
+  postgres_data:
+  axonserver-data:
+  axonserver-events:
+  axonserver-config:
+
+networks:
+  pbi-net:

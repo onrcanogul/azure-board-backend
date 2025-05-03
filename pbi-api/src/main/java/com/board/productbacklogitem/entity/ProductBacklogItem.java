@@ -17,7 +17,6 @@ import java.util.*;
 public class ProductBacklogItem {
     //Primary Key
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     // Reference id from Sprint service
     private UUID sprintId;

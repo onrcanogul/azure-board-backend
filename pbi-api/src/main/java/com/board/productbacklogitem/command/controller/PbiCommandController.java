@@ -1,8 +1,10 @@
 package com.board.productbacklogitem.command.controller;
 
-import com.board.productbacklogitem.command.commands.PbiCreatedCommand;
-import com.board.productbacklogitem.command.commands.PbiDeleteCommand;
-import com.board.productbacklogitem.command.commands.PbiUpdateCommand;
+import com.board.productbacklogitem.command.command.PbiCreatedCommand;
+import com.board.productbacklogitem.command.command.PbiDeleteCommand;
+import com.board.productbacklogitem.command.command.PbiUpdateCommand;
+import com.board.productbacklogitem.utils.service.NoContent;
+import com.board.productbacklogitem.utils.service.ServiceResponse;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,11 @@ public class PbiCommandController {
      * @param model - Create Command Model
      * @return Create Product Backlog Item
      */
-    @PostMapping("/create")
-    public CompletableFuture<String> create(@RequestBody PbiCreatedCommand model) {
-        return commandGateway.send(model);
+    @PostMapping
+    public ServiceResponse<NoContent> create(@RequestBody PbiCreatedCommand model) {
+        model.setId(UUID.randomUUID());
+        commandGateway.sendAndWait(model);
+        return ServiceResponse.success(201);
     }
 
     /**
@@ -35,9 +39,10 @@ public class PbiCommandController {
      * @param model - Update Command Model
      * @return Update Product Backlog Item
      */
-    @PutMapping("/update")
-    public CompletableFuture<String> update(@RequestBody PbiUpdateCommand model) {
-        return commandGateway.send(model);
+    @PutMapping
+    public ServiceResponse<NoContent> update(@RequestBody PbiUpdateCommand model) {
+        commandGateway.sendAndWait(model);
+        return ServiceResponse.success(200);
     }
 
     /**
@@ -45,9 +50,11 @@ public class PbiCommandController {
      * @param id - Id
      * @return Delete Product Backlog Item by id
      */
-    @DeleteMapping("/delete/{id}")
-    public CompletableFuture<String> delete(@PathVariable UUID id) {
+    @DeleteMapping("/{id}")
+    public ServiceResponse<NoContent> delete(@PathVariable UUID id) {
         PbiDeleteCommand command = new PbiDeleteCommand();
-        return commandGateway.send(command);
+        command.setId(id);
+        commandGateway.sendAndWait(command);
+        return ServiceResponse.success(200);
     }
 }

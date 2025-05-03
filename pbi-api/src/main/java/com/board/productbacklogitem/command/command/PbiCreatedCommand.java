@@ -1,4 +1,4 @@
-package com.board.productbacklogitem.command.commands;
+package com.board.productbacklogitem.command.command;
 
 import lombok.Data;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Data
-public class PbiUpdateCommand {
+public class PbiCreatedCommand {
     @TargetAggregateIdentifier
     private UUID id;
     private UUID sprintId;

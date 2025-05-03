@@ -80,9 +80,13 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> create(ProductBacklogItemDto model) {
-        ProductBacklogItem productBacklogItem = mapper.toEntity(model);
-        ProductBacklogItem createdProductBacklogItem = repository.save(productBacklogItem);
-        return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
+        try {
+            ProductBacklogItem productBacklogItem = mapper.toEntity(model);
+            ProductBacklogItem createdProductBacklogItem = repository.save(productBacklogItem);
+            return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      *

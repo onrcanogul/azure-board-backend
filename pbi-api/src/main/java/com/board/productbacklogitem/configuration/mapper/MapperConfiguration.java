@@ -1,6 +1,6 @@
 package com.board.productbacklogitem.configuration.mapper;
 
-import com.board.productbacklogitem.command.commands.PbiCreatedCommand;
+import com.board.productbacklogitem.command.command.PbiCreatedCommand;
 import com.board.productbacklogitem.dto.ProductBacklogItemDto;
 import com.board.productbacklogitem.entity.ProductBacklogItem;
 import org.springframework.context.annotation.Bean;

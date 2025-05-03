@@ -1,4 +1,4 @@
-package com.board.productbacklogitem.command.commands;
+package com.board.productbacklogitem.command.command;
 
 import lombok.Data;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
