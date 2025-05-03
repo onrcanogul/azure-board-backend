@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ProductBacklogItem
+    name: PBI Service
   datasource:
     url: jdbc:postgresql://localhost:5432/pbi-db
     username: postgres
