@@ -44,6 +44,11 @@ public class PbiAggregate {
 
     }
 
+    /**
+     *
+     * @param createCommand - Create Command Model
+     * @return Create CreatePbiEvent and send
+     */
     @CommandHandler
     public void handle(PbiCreatedCommand createCommand) {
         PbiCreatedEvent createdEvent = new PbiCreatedEvent();
@@ -72,7 +77,11 @@ public class PbiAggregate {
         this.isDeleted = event.isDeleted();
     }
 
-
+    /**
+     *
+     * @param updateCommand - Update Command Model
+     * @return Create UpdatePbiEvent and send
+     */
     @CommandHandler
     public void handle(PbiUpdateCommand updateCommand) {
         PbiUpdatedEvent updatedEvent = new PbiUpdatedEvent();
@@ -101,7 +110,11 @@ public class PbiAggregate {
         this.isDeleted = event.isDeleted();
     }
 
-
+    /**
+     *
+     * @param deleteCommand - Delete Command Model
+     * @return Create DeletePbiEvent and send
+     */
     @CommandHandler
     public void handle(PbiDeleteCommand deleteCommand) {
         PbiDeletedEvent pbiDeletedEvent = new PbiDeletedEvent();

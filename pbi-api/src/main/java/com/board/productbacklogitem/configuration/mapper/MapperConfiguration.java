@@ -6,6 +6,7 @@ import com.board.productbacklogitem.entity.ProductBacklogItem;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// Configure Mapping Relations
 @Configuration
 public class MapperConfiguration {
 
