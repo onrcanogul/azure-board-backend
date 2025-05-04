@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: Epic Service
+  datasource:
+    url: jdbc:postgresql://localhost:5436/epic-db
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
