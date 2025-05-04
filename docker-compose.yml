@@ -46,6 +46,21 @@ services:
     networks:
       - pbi-net
 
+  feature-db:
+    image: postgres:latest
+    container_name: feature-db
+    environment:
+      POSTGRES_DB: feature-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5435:5432"
+    volumes:
+      - feature_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - pbi-net
+
   axonserver:
     image: axoniq/axonserver:latest
     container_name: axonserver
@@ -68,6 +83,7 @@ volumes:
   postgres_data:
   sprint_data:
   bug_data:
+  feature_data:
   axonserver-data:
   axonserver-events:
   axonserver-config:
