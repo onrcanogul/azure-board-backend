@@ -31,6 +31,21 @@ services:
     networks:
       - pbi-net
 
+  bug-db:
+    image: postgres:latest
+    container_name: bug-db
+    environment:
+      POSTGRES_DB: bug-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5434:5432"
+    volumes:
+      - bug_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - pbi-net
+
   axonserver:
     image: axoniq/axonserver:latest
     container_name: axonserver
@@ -52,6 +67,7 @@ services:
 volumes:
   postgres_data:
   sprint_data:
+  bug_data:
   axonserver-data:
   axonserver-events:
   axonserver-config:
