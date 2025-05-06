@@ -91,6 +91,21 @@ services:
     networks:
       - pbi-net
 
+  project-db:
+    image: postgres:latest
+    container_name: project-db
+    environment:
+      POSTGRES_DB: project-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5438:5432"
+    volumes:
+      - team_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - pbi-net
+
   axonserver:
     image: axoniq/axonserver:latest
     container_name: axonserver
