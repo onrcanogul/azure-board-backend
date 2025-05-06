@@ -26,6 +26,7 @@ public class Feature {
     private int priority;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private boolean isCompleted;
     private boolean isDeleted;
 
 

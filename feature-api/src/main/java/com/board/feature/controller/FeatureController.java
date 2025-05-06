@@ -4,6 +4,7 @@ import com.board.feature.dto.FeatureDto;
 import com.board.feature.service.FeatureService;
 import com.board.feature.utils.NoContent;
 import com.board.feature.utils.ServiceResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +41,12 @@ public class FeatureController {
     @PostMapping
     public ResponseEntity<ServiceResponse<FeatureDto>> create(@RequestBody FeatureDto model) {
         ServiceResponse<FeatureDto> response = service.create(model);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
+    }
+
+    @PostMapping("/complete/{id}")
+    public ResponseEntity<ServiceResponse<NoContent>> complete(@PathVariable UUID id) throws JsonProcessingException {
+        ServiceResponse<NoContent> response = service.complete(id);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

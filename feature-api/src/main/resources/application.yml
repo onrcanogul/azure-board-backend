@@ -13,3 +13,30 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  spring:
+    kafka:
+      bootstrap-servers: localhost:9092 # veya kendi broker adresin
+      consumer:
+        group-id: bug-service
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        properties:
+          spring.json.trusted.packages: "*"
+          spring.json.value.default.type: com.board.bug.event.FeatureCompletedEvent # 👈 senin consumer class'ının tam ismi
+          spring.json.use.type.headers: false
+      listener:
+        missing-topics-fatal: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: bug-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.board.bug.event.FeatureCompletedEvent
+        spring.json.use.type.headers: false
+    listener:
+      missing-topics-fatal: false
