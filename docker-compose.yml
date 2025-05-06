@@ -76,6 +76,21 @@ services:
     networks:
       - pbi-net
 
+  team-db:
+    image: postgres:latest
+    container_name: team-db
+    environment:
+      POSTGRES_DB: team-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5437:5432"
+    volumes:
+      - team_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - pbi-net
+
   axonserver:
     image: axoniq/axonserver:latest
     container_name: axonserver
@@ -99,6 +114,7 @@ volumes:
   sprint_data:
   bug_data:
   feature_data:
+  team_data:
   epic_data:
   axonserver-data:
   axonserver-events:
