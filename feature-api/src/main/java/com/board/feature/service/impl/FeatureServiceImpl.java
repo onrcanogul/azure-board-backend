@@ -1,5 +1,6 @@
 package com.board.feature.service.impl;
 
+import com.board.feature.client.EpicClient;
 import com.board.feature.communication.event.FeatureCompletedEvent;
 import com.board.feature.configuration.mapper.Mapper;
 import com.board.feature.dto.FeatureDto;
@@ -10,6 +11,7 @@ import com.board.feature.service.FeatureService;
 import com.board.feature.utils.NoContent;
 import com.board.feature.utils.ServiceResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,11 +22,13 @@ public class FeatureServiceImpl implements FeatureService {
     private final FeatureRepository repository;
     private final Mapper<Feature, FeatureDto> mapper;
     private final FeatureEventPublisher eventPublisher;
+    private final EpicClient epicClient;
 
-    public FeatureServiceImpl(FeatureRepository repository, Mapper<Feature, FeatureDto> mapper, FeatureEventPublisher eventPublisher) {
+    public FeatureServiceImpl(FeatureRepository repository, Mapper<Feature, FeatureDto> mapper, FeatureEventPublisher eventPublisher, EpicClient epicClient) {
         this.repository = repository;
         this.mapper = mapper;
         this.eventPublisher = eventPublisher;
+        this.epicClient = epicClient;
     }
 
     @Override
@@ -47,6 +51,7 @@ public class FeatureServiceImpl implements FeatureService {
 
     @Override
     public ServiceResponse<FeatureDto> create(FeatureDto model) {
+        validations(model);
         Feature feature = mapper.toEntity(model);
         feature.setId(null);
         Feature createdFeature = repository.save(feature);
@@ -60,6 +65,7 @@ public class FeatureServiceImpl implements FeatureService {
 
     @Override
     public ServiceResponse<FeatureDto> update(FeatureDto model) {
+        validations(model);
         Feature feature = repository.findById(model.getId()).orElseThrow();
         feature.setTitle(model.getTitle());
         feature.setPriority(model.getPriority());
@@ -87,5 +93,15 @@ public class FeatureServiceImpl implements FeatureService {
     private void publishCompletedEvent(UUID featureId) throws JsonProcessingException {
         FeatureCompletedEvent featureCompletedEvent = new FeatureCompletedEvent(featureId);
         eventPublisher.publishFeatureCompleted(featureCompletedEvent);
+    }
+
+    private void validations(FeatureDto model) {
+        ServiceResponse<Boolean> response = epicClient.isExist(model.getEpicId());
+        if(!response.getData()) {
+            if(!response.isSuccessful()) {
+                throw new EntityNotFoundException("Epic service is not available");
+            }
+            throw new EntityNotFoundException("Epic not found");
+        }
     }
 }

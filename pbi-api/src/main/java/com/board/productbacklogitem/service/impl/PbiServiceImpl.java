@@ -87,7 +87,7 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> create(ProductBacklogItemDto model) {
-        Validations(model);
+        validations(model);
         ProductBacklogItem productBacklogItem = mapper.toEntity(model);
         ProductBacklogItem createdProductBacklogItem = repository.save(productBacklogItem);
         return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
@@ -100,7 +100,7 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> update(ProductBacklogItemDto model) {
-        Validations(model);
+        validations(model);
         Optional<ProductBacklogItem> optional = repository.findById(model.getId());
         if (optional.isEmpty()) {
             return ServiceResponse.failure("Product Backlog Item not found with id: " + model.getId(), 404);
@@ -148,7 +148,7 @@ public class PbiServiceImpl implements PbiService {
         entity.setIsDeleted(model.isDeleted());
     }
 
-    private void Validations(ProductBacklogItemDto model) {
+    private void validations(ProductBacklogItemDto model) {
         ServiceResponse<Boolean> isFeatureExist = featureClient.isExist(model.getFeatureId());
         if(!isFeatureExist.getData()) {
             if(isFeatureExist.isSuccessful()) {

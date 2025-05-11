@@ -45,7 +45,7 @@ public class EpicServiceImpl implements EpicService {
 
     @Override
     public ServiceResponse<EpicDto> create(EpicDto model) {
-        Validations(model);
+        validations(model);
         Epic epic = mapper.toEntity(model);
         Epic createdEpic = repository.save(epic);
         return ServiceResponse.success(mapper.toDto(createdEpic), 201);
@@ -53,7 +53,7 @@ public class EpicServiceImpl implements EpicService {
 
     @Override
     public ServiceResponse<EpicDto> update(EpicDto model) {
-        Validations(model);
+        validations(model);
         Epic epic = repository.findById(model.getId()).orElseThrow();
         epic.setPriority(model.getPriority());
         epic.setTitle(model.getTitle());
@@ -70,7 +70,7 @@ public class EpicServiceImpl implements EpicService {
         return ServiceResponse.success(204);
     }
 
-    private void Validations(EpicDto model) {
+    private void validations(EpicDto model) {
         ServiceResponse<Boolean> isTeamExist = teamClient.isExist(model.getTeamId());
         if(!isTeamExist.getData()) {
             if(isTeamExist.isSuccessful()) {
