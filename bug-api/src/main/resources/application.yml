@@ -33,6 +33,11 @@ axon:
     enabled: true
     servers: localhost:8124
 
+sprint-service:
+  url: http://localhost:8085
+
+feature-service:
+  url: http://localhost:8082
 
 
 server:

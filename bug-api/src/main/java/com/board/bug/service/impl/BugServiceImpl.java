@@ -1,5 +1,7 @@
 package com.board.bug.service.impl;
 
+import com.board.bug.client.FeatureClient;
+import com.board.bug.client.SprintClient;
 import com.board.bug.configuration.mapper.Mapper;
 import com.board.bug.dto.BugDto;
 import com.board.bug.entity.Bug;
@@ -7,6 +9,7 @@ import com.board.bug.repository.BugRepository;
 import com.board.bug.service.BugService;
 import com.board.bug.utils.NoContent;
 import com.board.bug.utils.ServiceResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -17,10 +20,14 @@ import java.util.UUID;
 public class BugServiceImpl implements BugService {
     private final BugRepository repository;
     private final Mapper<Bug, BugDto> mapper;
+    private final FeatureClient featureClient;
+    private final SprintClient sprintClient;
 
-    public BugServiceImpl(BugRepository repository, Mapper<Bug, BugDto> mapper) {
+    public BugServiceImpl(BugRepository repository, Mapper<Bug, BugDto> mapper, FeatureClient featureClient, SprintClient sprintClient) {
         this.repository = repository;
         this.mapper = mapper;
+        this.featureClient = featureClient;
+        this.sprintClient = sprintClient;
     }
 
     /**
@@ -90,6 +97,7 @@ public class BugServiceImpl implements BugService {
      */
     @Override
     public ServiceResponse<BugDto> create(BugDto model) {
+        validations(model);
         Bug bug = mapper.toEntity(model);
         Bug createdBug = repository.save(bug);
         return ServiceResponse.success(mapper.toDto(createdBug), 201);
@@ -103,6 +111,7 @@ public class BugServiceImpl implements BugService {
      */
     @Override
     public ServiceResponse<BugDto> update(BugDto model) {
+        validations(model);
         Bug bug = repository.findById(model.getId()).orElseThrow();
         updateMembers(bug, model);
         Bug updatedBug = repository.save(bug);
@@ -145,5 +154,23 @@ public class BugServiceImpl implements BugService {
         entity.setStartedDate(model.getStartedDate());
         entity.setCompletedDate(model.getCompletedDate());
         entity.setTagIds(new HashSet<>(model.getTagIds()));
+    }
+
+
+    private void validations(BugDto model) {
+        ServiceResponse<Boolean> isFeatureExist = featureClient.isExist(model.getFeatureId());
+        if(!isFeatureExist.getData()) {
+            if(isFeatureExist.isSuccessful()) {
+                throw new EntityNotFoundException("Feature does not exist");
+            }
+            throw new EntityNotFoundException("Feature service is not available");
+        }
+        ServiceResponse<Boolean> isSprintExist = sprintClient.isExist(model.getSprintId());
+        if(!isSprintExist.getData()) {
+            if(isSprintExist.isSuccessful()) {
+                throw new EntityNotFoundException("Sprint does not exist");
+            }
+            throw new EntityNotFoundException("Sprint service is not available");
+        }
     }
 }
