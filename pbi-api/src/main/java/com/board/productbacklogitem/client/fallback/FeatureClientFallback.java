@@ -1,6 +1,6 @@
-package com.board.productbacklogitem.service.feign.fallback;
+package com.board.productbacklogitem.client.fallback;
 
-import com.board.productbacklogitem.service.feign.FeatureClient;
+import com.board.productbacklogitem.client.FeatureClient;
 import com.board.productbacklogitem.utils.service.ServiceResponse;
 import org.springframework.stereotype.Component;
 

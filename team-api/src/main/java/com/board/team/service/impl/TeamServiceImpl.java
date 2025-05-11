@@ -37,6 +37,11 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public ServiceResponse<Boolean> isExist(UUID id) {
+        return ServiceResponse.success(repository.isExistById(id), 200);
+    }
+
+    @Override
     public ServiceResponse<TeamDto> create(TeamDto model) {
         Team team = mapper.toEntity(model);
         team.setId(null);

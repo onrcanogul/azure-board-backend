@@ -31,6 +31,11 @@ public class ProjectController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @GetMapping("/isExist/{id}")
+    public ServiceResponse<Boolean> isExist(@PathVariable UUID id) {
+        return service.isExist(id);
+    }
+
     @PostMapping
     public ResponseEntity<ServiceResponse<ProjectDto>> create(@RequestBody ProjectDto model) {
         ServiceResponse<ProjectDto> response = service.create(model);

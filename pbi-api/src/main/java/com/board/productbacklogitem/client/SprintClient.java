@@ -1,6 +1,6 @@
-package com.board.productbacklogitem.service.feign;
+package com.board.productbacklogitem.client;
 
-import com.board.productbacklogitem.service.feign.fallback.SprintClientFallback;
+import com.board.productbacklogitem.client.fallback.SprintClientFallback;
 import com.board.productbacklogitem.utils.service.ServiceResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

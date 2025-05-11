@@ -5,11 +5,12 @@ import com.board.productbacklogitem.dto.ProductBacklogItemDto;
 import com.board.productbacklogitem.entity.ProductBacklogItem;
 import com.board.productbacklogitem.repository.PbiRepository;
 import com.board.productbacklogitem.service.PbiService;
-import com.board.productbacklogitem.service.feign.FeatureClient;
-import com.board.productbacklogitem.service.feign.SprintClient;
+import com.board.productbacklogitem.client.FeatureClient;
+import com.board.productbacklogitem.client.SprintClient;
 import com.board.productbacklogitem.utils.service.NoContent;
 import com.board.productbacklogitem.utils.service.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ public class PbiServiceImpl implements PbiService {
     private final SprintClient sprintClient;
     private final FeatureClient featureClient;
 
-    public PbiServiceImpl(PbiRepository repository, Mapper<ProductBacklogItem, ProductBacklogItemDto> mapper, SprintClient sprintClient, FeatureClient featureClient) {
+    public PbiServiceImpl(PbiRepository repository, Mapper<ProductBacklogItem, ProductBacklogItemDto> mapper, @Qualifier("com.board.productbacklogitem.client.SprintClient") SprintClient sprintClient, @Qualifier("com.board.productbacklogitem.client.FeatureClient") FeatureClient featureClient) {
         this.repository = repository;
         this.mapper = mapper;
         this.sprintClient = sprintClient;

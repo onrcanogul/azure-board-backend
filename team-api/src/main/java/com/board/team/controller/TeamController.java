@@ -31,6 +31,11 @@ public class TeamController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @GetMapping("/isExist/{id}")
+    public ServiceResponse<Boolean> isExist(@PathVariable UUID id) {
+        return service.isExist(id);
+    }
+
     @PostMapping
     public ResponseEntity<ServiceResponse<TeamDto>> create(@RequestBody TeamDto model) {
         ServiceResponse<TeamDto> response = service.create(model);

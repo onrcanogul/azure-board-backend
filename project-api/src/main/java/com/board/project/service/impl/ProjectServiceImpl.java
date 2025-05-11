@@ -37,6 +37,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public ServiceResponse<Boolean> isExist(UUID id) {
+        return ServiceResponse.success(repository.isExistById(id), 200);
+    }
+
+    @Override
     public ServiceResponse<ProjectDto> create(ProjectDto model) {
         Project project = mapper.toEntity(model);
         project.setId(null);

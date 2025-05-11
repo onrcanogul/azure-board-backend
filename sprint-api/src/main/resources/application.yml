@@ -19,3 +19,8 @@ spring:
 
 server:
   port: 8085
+
+team-service:
+  url: "http://localhost:8086"
+feature-service:
+  url: "http://localhost:8082"
