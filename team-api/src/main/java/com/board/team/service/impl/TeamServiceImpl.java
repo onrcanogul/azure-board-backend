@@ -1,5 +1,6 @@
 package com.board.team.service.impl;
 
+import com.board.team.client.ProjectClient;
 import com.board.team.configuration.mapper.Mapper;
 import com.board.team.dto.TeamDto;
 import com.board.team.entity.Team;
@@ -7,6 +8,7 @@ import com.board.team.repository.TeamRepository;
 import com.board.team.service.TeamService;
 import com.board.team.util.NoContent;
 import com.board.team.util.ServiceResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +18,12 @@ import java.util.UUID;
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository repository;
     private final Mapper<Team, TeamDto> mapper;
+    private final ProjectClient projectClient;
 
-    public TeamServiceImpl(TeamRepository repository, Mapper<Team, TeamDto> mapper) {
+    public TeamServiceImpl(TeamRepository repository, Mapper<Team, TeamDto> mapper, ProjectClient projectClient) {
         this.repository = repository;
         this.mapper = mapper;
+        this.projectClient = projectClient;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public ServiceResponse<TeamDto> create(TeamDto model) {
+        validations(model);
         Team team = mapper.toEntity(model);
         team.setId(null);
         Team createdTeam = repository.save(team);
@@ -51,6 +56,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public ServiceResponse<TeamDto> update(TeamDto model) {
+        validations(model);
         Team team = repository.findById(model.getId()).orElseThrow();
         team.setName(model.getName());
         team.setDescription(model.getDescription());
@@ -64,5 +70,15 @@ public class TeamServiceImpl implements TeamService {
         team.setDeleted(true);
         repository.save(team);
         return ServiceResponse.success(204);
+    }
+
+    private void validations(TeamDto model) {
+        ServiceResponse<Boolean> response = projectClient.isExist(model.getProjectId());
+        if(!response.getData()) {
+            if(!response.isSuccessful()) {
+                throw new EntityNotFoundException("Project service is not available");
+            }
+            throw new EntityNotFoundException("Project not found");
+        }
     }
 }

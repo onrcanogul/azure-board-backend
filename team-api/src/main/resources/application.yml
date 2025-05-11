@@ -17,3 +17,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8086
+
+project-service:
+  url: "http://localhost:8084"
