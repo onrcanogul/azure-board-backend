@@ -87,12 +87,7 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> create(ProductBacklogItemDto model) {
-        Boolean isFeatureExist = featureClient.isExist(model.getFeatureId()).getData();
-        if(isFeatureExist)
-            throw new EntityNotFoundException("Feature not found");
-        Boolean isSprintExist = sprintClient.isExist(model.getSprintId()).getData();
-        if(isSprintExist)
-            throw new EntityNotFoundException("Sprint not found");
+        Validations(model);
         ProductBacklogItem productBacklogItem = mapper.toEntity(model);
         ProductBacklogItem createdProductBacklogItem = repository.save(productBacklogItem);
         return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
@@ -105,12 +100,7 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> update(ProductBacklogItemDto model) {
-        Boolean isFeatureExist = featureClient.isExist(model.getFeatureId()).getData();
-        if(isFeatureExist)
-            throw new EntityNotFoundException("Feature not found");
-        Boolean isSprintExist = sprintClient.isExist(model.getSprintId()).getData();
-        if(isSprintExist)
-            throw new EntityNotFoundException("Sprint not found");
+        Validations(model);
         Optional<ProductBacklogItem> optional = repository.findById(model.getId());
         if (optional.isEmpty()) {
             return ServiceResponse.failure("Product Backlog Item not found with id: " + model.getId(), 404);
@@ -156,5 +146,22 @@ public class PbiServiceImpl implements PbiService {
         entity.setCompletedDate(model.getCompletedDate());
         entity.setTagIds(new HashSet<>(model.getTagIds()));
         entity.setIsDeleted(model.isDeleted());
+    }
+
+    private void Validations(ProductBacklogItemDto model) {
+        ServiceResponse<Boolean> isFeatureExist = featureClient.isExist(model.getFeatureId());
+        if(!isFeatureExist.getData()) {
+            if(isFeatureExist.isSuccessful()) {
+                throw new EntityNotFoundException("Feature does not exist");
+            }
+            throw new EntityNotFoundException("Feature service is not available");
+        }
+        ServiceResponse<Boolean> isSprintExist = sprintClient.isExist(model.getSprintId());
+        if(!isSprintExist.getData()) {
+            if(isSprintExist.isSuccessful()) {
+                throw new EntityNotFoundException("Sprint does not exist");
+            }
+            throw new EntityNotFoundException("Sprint service is not available");
+        }
     }
 }

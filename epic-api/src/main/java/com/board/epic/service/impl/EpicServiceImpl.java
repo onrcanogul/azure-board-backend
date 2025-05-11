@@ -1,5 +1,6 @@
 package com.board.epic.service.impl;
 
+import com.board.epic.client.TeamClient;
 import com.board.epic.configuration.mapper.Mapper;
 import com.board.epic.dto.EpicDto;
 import com.board.epic.entity.Epic;
@@ -7,6 +8,7 @@ import com.board.epic.repository.EpicRepository;
 import com.board.epic.service.EpicService;
 import com.board.epic.utils.NoContent;
 import com.board.epic.utils.ServiceResponse;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +18,12 @@ import java.util.UUID;
 public class EpicServiceImpl implements EpicService {
     private final EpicRepository repository;
     private final Mapper<Epic, EpicDto> mapper;
+    private final TeamClient teamClient;
 
-    public EpicServiceImpl(EpicRepository repository, Mapper<Epic, EpicDto> mapper) {
+    public EpicServiceImpl(EpicRepository repository, Mapper<Epic, EpicDto> mapper, TeamClient teamClient) {
         this.repository = repository;
         this.mapper = mapper;
+        this.teamClient = teamClient;
     }
 
     @Override
@@ -41,6 +45,7 @@ public class EpicServiceImpl implements EpicService {
 
     @Override
     public ServiceResponse<EpicDto> create(EpicDto model) {
+        Validations(model);
         Epic epic = mapper.toEntity(model);
         Epic createdEpic = repository.save(epic);
         return ServiceResponse.success(mapper.toDto(createdEpic), 201);
@@ -48,6 +53,7 @@ public class EpicServiceImpl implements EpicService {
 
     @Override
     public ServiceResponse<EpicDto> update(EpicDto model) {
+        Validations(model);
         Epic epic = repository.findById(model.getId()).orElseThrow();
         epic.setPriority(model.getPriority());
         epic.setTitle(model.getTitle());
@@ -62,5 +68,15 @@ public class EpicServiceImpl implements EpicService {
         epic.setDeleted(true);
         repository.save(epic);
         return ServiceResponse.success(204);
+    }
+
+    private void Validations(EpicDto model) {
+        ServiceResponse<Boolean> isTeamExist = teamClient.isExist(model.getTeamId());
+        if(!isTeamExist.getData()) {
+            if(isTeamExist.isSuccessful()) {
+                throw new EntityNotFoundException("Team does not exist");
+            }
+            throw new EntityNotFoundException("Team service is not available");
+        }
     }
 }

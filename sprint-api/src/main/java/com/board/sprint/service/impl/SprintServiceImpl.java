@@ -128,10 +128,18 @@ public class SprintServiceImpl implements SprintService {
 
     private void Validations(SprintDto model) {
         ServiceResponse<Boolean> isTeamExist = teamClient.isExist(model.getProjectId());
-        if(isTeamExist.getData())
-            throw new EntityNotFoundException(isTeamExist.getErrors().getFirst());
+        if(!isTeamExist.getData()) {
+            if(isTeamExist.isSuccessful()) {
+                throw new EntityNotFoundException("Team does not exist");
+            }
+            throw new EntityNotFoundException("Team service is not available");
+        }
         ServiceResponse<Boolean> isProjectExist = projectClient.isExist(model.getProjectId());
-        if(isProjectExist.getData())
-            throw new EntityNotFoundException(isProjectExist.getErrors().getFirst());
+        if(!isProjectExist.getData()) {
+            if(isProjectExist.isSuccessful()) {
+                throw new EntityNotFoundException("Project does not exist");
+            }
+            throw new EntityNotFoundException("Project service is not available");
+        }
     }
 }
