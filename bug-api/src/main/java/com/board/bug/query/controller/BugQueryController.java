@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/bug")
 public class BugQueryController {
     private final QueryGateway gateway;
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/bug")
 public class BugCommandController {
     private final CommandGateway gateway;
     private final Mapper<BugCreatedCommand, BugDto> createdCommandBugDtoMapper;

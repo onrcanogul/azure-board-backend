@@ -1,0 +1,83 @@
+
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"
+      routes:
+        - id: pbi-api
+          uri: http://localhost:8080
+          predicates:
+            - Path=/pbi/**
+          filters:
+            - RewritePath=/pbi/(?<segment>.*), /api/pbi/${segment}
+
+        - id: bug-api
+          uri: http://localhost:8081
+          predicates:
+            - Path=/bug/**
+          filters:
+            - RewritePath=/bug/(?<segment>.*), /api/bug/${segment}
+
+        - id: feature-api
+          uri: http://localhost:8082
+          predicates:
+            - Path=/feature/**
+          filters:
+            - RewritePath=/feature/(?<segment>.*), /api/feature/${segment}
+
+        - id: epic-api
+          uri: http://localhost:8083
+          predicates:
+            - Path=/epic/**
+          filters:
+            - RewritePath=/epic/(?<segment>.*), /api/epic/${segment}
+
+        - id: project-api
+          uri: http://localhost:8084
+          predicates:
+            - Path=/project/**
+          filters:
+            - RewritePath=/project/(?<segment>.*), /api/project/${segment}
+
+        - id: sprint-api
+          uri: http://localhost:8085
+          predicates:
+            - Path=/sprint/**
+          filters:
+            - RewritePath=/sprint/(?<segment>.*), /api/sprint/${segment}
+
+        - id: team-api
+          uri: http://localhost:8086
+          predicates:
+            - Path=/team/**
+          filters:
+            - RewritePath=/team/(?<segment>.*), /api/team/${segment}
+
+logging:
+  level:
+    root: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.web: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
+
+server:
+  port: 8080

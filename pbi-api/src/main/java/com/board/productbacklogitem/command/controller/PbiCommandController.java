@@ -12,7 +12,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/pbi")
 public class PbiCommandController {
 
     private final CommandGateway commandGateway;

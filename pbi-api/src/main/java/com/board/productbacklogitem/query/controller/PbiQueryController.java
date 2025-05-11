@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/pbi")
 public class PbiQueryController {
     private final QueryGateway queryGateway;
 
