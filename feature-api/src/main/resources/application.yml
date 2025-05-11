@@ -40,3 +40,6 @@ spring:
         spring.json.use.type.headers: false
     listener:
       missing-topics-fatal: false
+
+server:
+  port: 8082

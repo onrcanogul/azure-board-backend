@@ -1,5 +1,6 @@
 package com.board.productbacklogitem.entity;
 
+import com.board.productbacklogitem.enumeration.PbiState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class ProductBacklogItem {
     // Priority of the PBI
     private int priority;
     // State of the PBI
-    private String state;
+    private PbiState state;
     // Story point of the PBI
     private int storyPoint;
     // Business value of the PBI

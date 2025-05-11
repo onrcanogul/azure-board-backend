@@ -25,6 +25,9 @@ public class FeatureCompletedConsumer {
     public void handle(String payload) throws JsonProcessingException {
         FeatureCompletedEvent event = objectMapper.readValue(payload, FeatureCompletedEvent.class);
         List<Bug> bugs = repository.findByFeatureId(event.getFeatureId());
+        if(bugs.isEmpty()) {
+            return;
+        }
         for (Bug bug : bugs) {
             bug.setStatus(BugStatus.RESOLVED);
         }
