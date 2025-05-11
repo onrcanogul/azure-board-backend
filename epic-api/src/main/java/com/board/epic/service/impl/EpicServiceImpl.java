@@ -9,6 +9,7 @@ import com.board.epic.service.EpicService;
 import com.board.epic.utils.NoContent;
 import com.board.epic.utils.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class EpicServiceImpl implements EpicService {
     private final Mapper<Epic, EpicDto> mapper;
     private final TeamClient teamClient;
 
-    public EpicServiceImpl(EpicRepository repository, Mapper<Epic, EpicDto> mapper, TeamClient teamClient) {
+    public EpicServiceImpl(EpicRepository repository, Mapper<Epic, EpicDto> mapper, @Qualifier("com.board.epic.client.TeamClient") TeamClient teamClient) {
         this.repository = repository;
         this.mapper = mapper;
         this.teamClient = teamClient;

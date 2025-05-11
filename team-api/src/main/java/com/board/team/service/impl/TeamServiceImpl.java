@@ -9,6 +9,7 @@ import com.board.team.service.TeamService;
 import com.board.team.util.NoContent;
 import com.board.team.util.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class TeamServiceImpl implements TeamService {
     private final Mapper<Team, TeamDto> mapper;
     private final ProjectClient projectClient;
 
-    public TeamServiceImpl(TeamRepository repository, Mapper<Team, TeamDto> mapper, ProjectClient projectClient) {
+    public TeamServiceImpl(TeamRepository repository, Mapper<Team, TeamDto> mapper, @Qualifier("com.board.team.client.ProjectClient") ProjectClient projectClient) {
         this.repository = repository;
         this.mapper = mapper;
         this.projectClient = projectClient;
@@ -74,10 +75,7 @@ public class TeamServiceImpl implements TeamService {
 
     private void validations(TeamDto model) {
         ServiceResponse<Boolean> response = projectClient.isExist(model.getProjectId());
-        if(!response.getData()) {
-            if(!response.isSuccessful()) {
-                throw new EntityNotFoundException("Project service is not available");
-            }
+        if(!response.isSuccessful()) {
             throw new EntityNotFoundException("Project not found");
         }
     }

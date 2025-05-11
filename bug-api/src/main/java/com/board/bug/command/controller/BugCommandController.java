@@ -11,6 +11,7 @@ import com.board.bug.utils.NoContent;
 import com.board.bug.utils.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,7 +27,13 @@ public class BugCommandController {
 
 
 
-    public BugCommandController(CommandGateway gateway, Mapper<BugCreatedCommand, BugDto> createdCommandBugDtoMapper, Mapper<BugUpdatedCommand, BugDto> updatedCommandBugDtoMapper, FeatureClient featureClient, SprintClient sprintClient) {
+    public BugCommandController(
+            CommandGateway gateway,
+            Mapper<BugCreatedCommand, BugDto> createdCommandBugDtoMapper,
+            Mapper<BugUpdatedCommand, BugDto> updatedCommandBugDtoMapper,
+            @Qualifier("com.board.bug.client.FeatureClient") FeatureClient featureClient,
+            @Qualifier("com.board.bug.client.SprintClient") SprintClient sprintClient
+    ) {
         this.gateway = gateway;
         this.createdCommandBugDtoMapper = createdCommandBugDtoMapper;
         this.updatedCommandBugDtoMapper = updatedCommandBugDtoMapper;
@@ -41,10 +48,7 @@ public class BugCommandController {
      */
     @PostMapping
     public ServiceResponse<BugDto> create(@RequestBody BugCreatedCommand model) {
-        ServiceResponse<Boolean> response = featureClient.isExist(model.getFeatureId());
-        if(!response.getData()) {
-            throw new EntityNotFoundException();
-        }
+        validations(model.getFeatureId(), model.getSprintId());
         model.setId(UUID.randomUUID());
         gateway.sendAndWait(model);
 
@@ -58,10 +62,7 @@ public class BugCommandController {
      */
     @PutMapping
     public ServiceResponse<BugDto> update(@RequestBody BugUpdatedCommand model) {
-        ServiceResponse<Boolean> response = featureClient.isExist(model.getFeatureId());
-        if(!response.getData()) {
-            throw new EntityNotFoundException();
-        }
+        validations(model.getFeatureId(), model.getSprintId());
         gateway.sendAndWait(model);
         return ServiceResponse.success(updatedCommandBugDtoMapper.toDto(model),200);
     }
@@ -77,5 +78,16 @@ public class BugCommandController {
         command.setId(id);
         gateway.sendAndWait(command);
         return ServiceResponse.success(200);
+    }
+
+    private void validations(UUID featureId, UUID sprintId) {
+        ServiceResponse<Boolean> response = featureClient.isExist(featureId);
+        if(!response.isSuccessful()) {
+            throw new EntityNotFoundException();
+        }
+        ServiceResponse<Boolean> sprintResponse = sprintClient.isExist(sprintId);
+        if(!sprintResponse.isSuccessful()) {
+            throw new EntityNotFoundException();
+        }
     }
 }

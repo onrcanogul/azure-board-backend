@@ -10,6 +10,7 @@ import com.board.bug.service.BugService;
 import com.board.bug.utils.NoContent;
 import com.board.bug.utils.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -23,7 +24,7 @@ public class BugServiceImpl implements BugService {
     private final FeatureClient featureClient;
     private final SprintClient sprintClient;
 
-    public BugServiceImpl(BugRepository repository, Mapper<Bug, BugDto> mapper, FeatureClient featureClient, SprintClient sprintClient) {
+    public BugServiceImpl(BugRepository repository, Mapper<Bug, BugDto> mapper, @Qualifier("com.board.bug.client.FeatureClient") FeatureClient featureClient, SprintClient sprintClient) {
         this.repository = repository;
         this.mapper = mapper;
         this.featureClient = featureClient;

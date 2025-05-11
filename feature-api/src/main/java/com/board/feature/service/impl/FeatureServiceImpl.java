@@ -12,6 +12,7 @@ import com.board.feature.utils.NoContent;
 import com.board.feature.utils.ServiceResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,12 @@ public class FeatureServiceImpl implements FeatureService {
     private final FeatureEventPublisher eventPublisher;
     private final EpicClient epicClient;
 
-    public FeatureServiceImpl(FeatureRepository repository, Mapper<Feature, FeatureDto> mapper, FeatureEventPublisher eventPublisher, EpicClient epicClient) {
+    public FeatureServiceImpl(
+            FeatureRepository repository,
+            Mapper<Feature, FeatureDto> mapper,
+            FeatureEventPublisher eventPublisher,
+            @Qualifier("com.board.feature.client.EpicClient") EpicClient epicClient
+    ) {
         this.repository = repository;
         this.mapper = mapper;
         this.eventPublisher = eventPublisher;
@@ -97,10 +103,7 @@ public class FeatureServiceImpl implements FeatureService {
 
     private void validations(FeatureDto model) {
         ServiceResponse<Boolean> response = epicClient.isExist(model.getEpicId());
-        if(!response.getData()) {
-            if(!response.isSuccessful()) {
-                throw new EntityNotFoundException("Epic service is not available");
-            }
+        if(!response.isSuccessful()) {
             throw new EntityNotFoundException("Epic not found");
         }
     }
