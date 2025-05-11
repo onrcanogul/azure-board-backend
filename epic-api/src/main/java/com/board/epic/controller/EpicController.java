@@ -31,6 +31,11 @@ public class EpicController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @GetMapping("/isExist/{id}")
+    public ServiceResponse<Boolean> isExist(@PathVariable UUID id) {
+        return service.isExist(id);
+    }
+
     @PostMapping
     public ResponseEntity<ServiceResponse<EpicDto>> create(@RequestBody EpicDto model) {
         ServiceResponse<EpicDto> response = service.create(model);

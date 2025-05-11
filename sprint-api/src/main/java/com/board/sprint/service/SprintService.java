@@ -33,6 +33,14 @@ public interface SprintService {
     ServiceResponse<List<SprintDto>> getByTeam(UUID teamId);
 
     /**
+     * Retrieves all sprints associated with the given team.
+     *
+     * @param id the ID of the team
+     * @return IsExist
+     */
+    ServiceResponse<Boolean> isExist(UUID id);
+
+    /**
      * Creates a new sprint with the provided data.
      *
      * @param model the sprint details to be created

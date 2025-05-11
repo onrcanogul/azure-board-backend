@@ -16,8 +16,6 @@ import java.util.UUID;
 public class PbiCommandController {
 
     private final CommandGateway commandGateway;
-
-
     public PbiCommandController(CommandGateway commandGateway) {
         this.commandGateway = commandGateway;
     }

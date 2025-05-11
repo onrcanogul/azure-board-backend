@@ -5,6 +5,8 @@ import com.board.productbacklogitem.dto.ProductBacklogItemDto;
 import com.board.productbacklogitem.entity.ProductBacklogItem;
 import com.board.productbacklogitem.repository.PbiRepository;
 import com.board.productbacklogitem.service.PbiService;
+import com.board.productbacklogitem.service.feign.FeatureClient;
+import com.board.productbacklogitem.service.feign.SprintClient;
 import com.board.productbacklogitem.utils.service.NoContent;
 import com.board.productbacklogitem.utils.service.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -20,10 +22,14 @@ public class PbiServiceImpl implements PbiService {
 
     private final PbiRepository repository;
     private final Mapper<ProductBacklogItem, ProductBacklogItemDto> mapper;
+    private final SprintClient sprintClient;
+    private final FeatureClient featureClient;
 
-    public PbiServiceImpl(PbiRepository repository, Mapper<ProductBacklogItem, ProductBacklogItemDto> mapper) {
+    public PbiServiceImpl(PbiRepository repository, Mapper<ProductBacklogItem, ProductBacklogItemDto> mapper, SprintClient sprintClient, FeatureClient featureClient) {
         this.repository = repository;
         this.mapper = mapper;
+        this.sprintClient = sprintClient;
+        this.featureClient = featureClient;
     }
     /**
      *
@@ -80,13 +86,16 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> create(ProductBacklogItemDto model) {
-        try {
-            ProductBacklogItem productBacklogItem = mapper.toEntity(model);
-            ProductBacklogItem createdProductBacklogItem = repository.save(productBacklogItem);
-            return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+        Boolean isFeatureExist = featureClient.isExist(model.getFeatureId()).getData();
+        if(isFeatureExist)
+            throw new EntityNotFoundException("Feature not found");
+        Boolean isSprintExist = sprintClient.isExist(model.getSprintId()).getData();
+        if(isSprintExist)
+            throw new EntityNotFoundException("Sprint not found");
+        ProductBacklogItem productBacklogItem = mapper.toEntity(model);
+        ProductBacklogItem createdProductBacklogItem = repository.save(productBacklogItem);
+        return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
+
     }
     /**
      *
@@ -95,6 +104,12 @@ public class PbiServiceImpl implements PbiService {
      */
     @Override
     public ServiceResponse<ProductBacklogItemDto> update(ProductBacklogItemDto model) {
+        Boolean isFeatureExist = featureClient.isExist(model.getFeatureId()).getData();
+        if(isFeatureExist)
+            throw new EntityNotFoundException("Feature not found");
+        Boolean isSprintExist = sprintClient.isExist(model.getSprintId()).getData();
+        if(isSprintExist)
+            throw new EntityNotFoundException("Sprint not found");
         Optional<ProductBacklogItem> optional = repository.findById(model.getId());
         if (optional.isEmpty()) {
             return ServiceResponse.failure("Product Backlog Item not found with id: " + model.getId(), 404);

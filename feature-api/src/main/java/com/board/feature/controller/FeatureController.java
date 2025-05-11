@@ -38,6 +38,11 @@ public class FeatureController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    @GetMapping("/isExist/{id}")
+    public ServiceResponse<Boolean> isExist(@PathVariable UUID id) {
+        return service.isExist(id);
+    }
+
     @PostMapping
     public ResponseEntity<ServiceResponse<FeatureDto>> create(@RequestBody FeatureDto model) {
         ServiceResponse<FeatureDto> response = service.create(model);

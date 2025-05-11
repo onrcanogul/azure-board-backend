@@ -59,6 +59,16 @@ public class SprintServiceImpl implements SprintService {
     }
 
     /**
+     *
+     * @param id the ID of the team
+     * @return IsExist
+     */
+    @Override
+    public ServiceResponse<Boolean> isExist(UUID id) {
+        return ServiceResponse.success(repository.isExistById(id), 200);
+    }
+
+    /**
      * Creates a new sprint from the given model.
      *
      * @param model the sprint DTO to create

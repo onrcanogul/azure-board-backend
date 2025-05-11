@@ -54,6 +54,11 @@ public class FeatureServiceImpl implements FeatureService {
     }
 
     @Override
+    public ServiceResponse<Boolean> isExist(UUID id) {
+        return ServiceResponse.success(repository.isExistById(id), 200);
+    }
+
+    @Override
     public ServiceResponse<FeatureDto> update(FeatureDto model) {
         Feature feature = repository.findById(model.getId()).orElseThrow();
         feature.setTitle(model.getTitle());

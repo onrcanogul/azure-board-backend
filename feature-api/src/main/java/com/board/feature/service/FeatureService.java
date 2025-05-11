@@ -12,6 +12,7 @@ public interface FeatureService {
     ServiceResponse<FeatureDto> getById(UUID id);
     ServiceResponse<List<FeatureDto>> getByArea(UUID areaId);
     ServiceResponse<List<FeatureDto>> getByEpic(UUID epicId);
+    ServiceResponse<Boolean> isExist(UUID id);
     ServiceResponse<FeatureDto> create(FeatureDto model);
     ServiceResponse<FeatureDto> update(FeatureDto model);
     ServiceResponse<NoContent> complete(UUID featureId) throws JsonProcessingException;

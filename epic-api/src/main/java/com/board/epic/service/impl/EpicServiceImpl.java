@@ -35,6 +35,11 @@ public class EpicServiceImpl implements EpicService {
     }
 
     @Override
+    public ServiceResponse<Boolean> isExist(UUID id) {
+        return ServiceResponse.success(repository.isExistById(id), 200);
+    }
+
+    @Override
     public ServiceResponse<EpicDto> create(EpicDto model) {
         Epic epic = mapper.toEntity(model);
         Epic createdEpic = repository.save(epic);

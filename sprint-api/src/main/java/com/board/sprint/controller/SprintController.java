@@ -54,6 +54,17 @@ public class SprintController {
     }
 
     /**
+     * Retrieves all sprints under a specific project.
+     *
+     * @param id the UUID of the team
+     * @return isExist
+     */
+    @GetMapping("/isExist/{id}")
+    public ServiceResponse<Boolean> isExist(@PathVariable UUID id) {
+        return service.isExist(id);
+    }
+
+    /**
      * Creates a new sprint.
      *
      * @param model the sprint data to create
