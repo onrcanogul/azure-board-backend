@@ -3,9 +3,12 @@ package com.board.productbacklogitem.command.aggregate;
 import com.board.productbacklogitem.command.command.PbiCreatedCommand;
 import com.board.productbacklogitem.command.command.PbiDeleteCommand;
 import com.board.productbacklogitem.command.command.PbiUpdateCommand;
+import com.board.productbacklogitem.command.command.PbiUpdateStateCommand;
 import com.board.productbacklogitem.command.event.PbiCreatedEvent;
 import com.board.productbacklogitem.command.event.PbiDeletedEvent;
+import com.board.productbacklogitem.command.event.PbiStateUpdatedEvent;
 import com.board.productbacklogitem.command.event.PbiUpdatedEvent;
+import com.board.productbacklogitem.enumeration.PbiState;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -30,7 +33,7 @@ public class PbiAggregate {
     private String functionalDescription;
     private String technicalDescription;
     private int priority;
-    private String state;
+    private PbiState state;
     private int storyPoint;
     private int businessValue;
     private LocalDateTime dueDate;
@@ -114,6 +117,24 @@ public class PbiAggregate {
         this.tagIds = event.getTagIds();
         this.isDeleted = event.isDeleted();
     }
+
+    @EventSourcingHandler
+    public void on(PbiStateUpdatedEvent event) {
+        this.id = event.getId();
+        this.state = event.getState();
+    }
+    /**
+     *
+     * @param stateUpdateCommand - State update infos
+     * @return Pbi state update
+     */
+    @CommandHandler
+    public void handle(PbiUpdateStateCommand stateUpdateCommand) {
+        PbiStateUpdatedEvent stateUpdatedEvent = new PbiStateUpdatedEvent();
+        BeanUtils.copyProperties(stateUpdateCommand, stateUpdatedEvent);
+        AggregateLifecycle.apply(stateUpdatedEvent);
+    }
+
 
     /**
      *

@@ -1,7 +1,9 @@
 package com.board.productbacklogitem.query.projection;
 
+import com.board.productbacklogitem.command.command.PbiUpdateStateCommand;
 import com.board.productbacklogitem.command.event.PbiCreatedEvent;
 import com.board.productbacklogitem.command.event.PbiDeletedEvent;
+import com.board.productbacklogitem.command.event.PbiStateUpdatedEvent;
 import com.board.productbacklogitem.command.event.PbiUpdatedEvent;
 import com.board.productbacklogitem.dto.ProductBacklogItemDto;
 import com.board.productbacklogitem.service.PbiService;
@@ -29,6 +31,11 @@ public class PbiProjection {
         ProductBacklogItemDto dto = new ProductBacklogItemDto();
         BeanUtils.copyProperties(event, dto);
         service.update(dto);
+    }
+
+    @EventHandler
+    public void on(PbiStateUpdatedEvent event) {
+        service.updateStatus(event.getId(), event.getState());
     }
 
     @EventHandler

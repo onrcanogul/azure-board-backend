@@ -2,9 +2,11 @@ package com.board.bug.command.aggregate;
 
 import com.board.bug.command.command.BugCreatedCommand;
 import com.board.bug.command.command.BugDeletedCommand;
+import com.board.bug.command.command.BugStatusUpdatedCommand;
 import com.board.bug.command.command.BugUpdatedCommand;
 import com.board.bug.command.event.BugCreatedEvent;
 import com.board.bug.command.event.BugDeletedEvent;
+import com.board.bug.command.event.BugStatusUpdatedEvent;
 import com.board.bug.command.event.BugUpdatedEvent;
 import com.board.bug.enumeration.BugStatus;
 import org.axonframework.commandhandling.CommandHandler;
@@ -115,6 +117,26 @@ public class BugAggregate {
         this.tagIds = event.getTagIds();
         this.isDeleted = event.isDeleted();
         this.isNoBug = event.isNoBug();
+    }
+
+
+    /**
+     *
+     * @param updateCommand - Bug Status Updated Command Model
+     * @return Send BugStatusUpdatedEvent
+     */
+    @CommandHandler
+    public void handle(BugStatusUpdatedCommand updateCommand) {
+        BugStatusUpdatedEvent updatedEvent = new BugStatusUpdatedEvent();
+        BeanUtils.copyProperties(updateCommand, updatedEvent);
+        AggregateLifecycle.apply(updatedEvent);
+    }
+
+
+    @EventSourcingHandler
+    public void on(BugStatusUpdatedEvent event) {
+        this.id = event.getId();
+        this.status = event.getState();
     }
 
     /**

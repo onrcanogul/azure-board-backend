@@ -1,6 +1,7 @@
 package com.board.bug.service;
 
 import com.board.bug.dto.BugDto;
+import com.board.bug.enumeration.BugStatus;
 import com.board.bug.utils.NoContent;
 import com.board.bug.utils.ServiceResponse;
 
@@ -66,6 +67,15 @@ public interface BugService {
      * @return ServiceResponse containing the updated BugDto and HTTP status 200
      */
     ServiceResponse<BugDto> update(BugDto model);
+
+    /**
+     * Updates status of an existing bug in the system.
+     *
+     * @param id - id of the bug
+     * @param state - state of the bug
+     * @return ServiceResponse containing the updated BugDto and HTTP status 200
+     */
+    ServiceResponse<BugDto> updateState(UUID id, BugStatus state);
 
     /**
      * Soft-deletes a bug by marking it as deleted.

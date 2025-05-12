@@ -4,6 +4,7 @@ import com.board.bug.client.FeatureClient;
 import com.board.bug.client.SprintClient;
 import com.board.bug.command.command.BugCreatedCommand;
 import com.board.bug.command.command.BugDeletedCommand;
+import com.board.bug.command.command.BugStatusUpdatedCommand;
 import com.board.bug.command.command.BugUpdatedCommand;
 import com.board.bug.configuration.mapper.Mapper;
 import com.board.bug.dto.BugDto;
@@ -65,6 +66,17 @@ public class BugCommandController {
         validations(model.getFeatureId(), model.getSprintId());
         gateway.sendAndWait(model);
         return ServiceResponse.success(updatedCommandBugDtoMapper.toDto(model),200);
+    }
+
+    /**
+     *
+     * @param model - Update Status Command Model
+     * @return Update status of a Product Backlog Item
+     */
+    @PutMapping("/status")
+    public ServiceResponse<NoContent> updateStatus(@RequestBody BugStatusUpdatedCommand model) {
+        gateway.sendAndWait(model);
+        return ServiceResponse.success(200);
     }
 
     /**

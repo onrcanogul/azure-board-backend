@@ -5,6 +5,7 @@ import com.board.productbacklogitem.client.SprintClient;
 import com.board.productbacklogitem.command.command.PbiCreatedCommand;
 import com.board.productbacklogitem.command.command.PbiDeleteCommand;
 import com.board.productbacklogitem.command.command.PbiUpdateCommand;
+import com.board.productbacklogitem.command.command.PbiUpdateStateCommand;
 import com.board.productbacklogitem.utils.service.NoContent;
 import com.board.productbacklogitem.utils.service.ServiceResponse;
 import jakarta.persistence.EntityNotFoundException;
@@ -53,6 +54,17 @@ public class PbiCommandController {
     @PutMapping
     public ServiceResponse<NoContent> update(@RequestBody PbiUpdateCommand model) {
         validations(model.getFeatureId(), model.getSprintId());
+        commandGateway.sendAndWait(model);
+        return ServiceResponse.success(200);
+    }
+
+    /**
+     *
+     * @param model - Update State Model
+     * @return Update State of Product Backlog Item
+     */
+    @PutMapping("/state")
+    public ServiceResponse<NoContent> updateState(@RequestBody PbiUpdateStateCommand model) {
         commandGateway.sendAndWait(model);
         return ServiceResponse.success(200);
     }

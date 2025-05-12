@@ -3,6 +3,7 @@ package com.board.productbacklogitem.service.impl;
 import com.board.productbacklogitem.configuration.mapper.Mapper;
 import com.board.productbacklogitem.dto.ProductBacklogItemDto;
 import com.board.productbacklogitem.entity.ProductBacklogItem;
+import com.board.productbacklogitem.enumeration.PbiState;
 import com.board.productbacklogitem.repository.PbiRepository;
 import com.board.productbacklogitem.service.PbiService;
 import com.board.productbacklogitem.client.FeatureClient;
@@ -93,6 +94,16 @@ public class PbiServiceImpl implements PbiService {
         return ServiceResponse.success(mapper.toDto(createdProductBacklogItem), 201);
 
     }
+
+    @Override
+    public ServiceResponse<ProductBacklogItemDto> updateStatus(UUID id, PbiState state) {
+        ProductBacklogItem pbi = repository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+        pbi.setState(state);
+        ProductBacklogItem savedPbi = repository.save(pbi);
+        return ServiceResponse.success(mapper.toDto(savedPbi), 200);
+    }
+
     /**
      *
      * @param model - Product Backlog Item Dto

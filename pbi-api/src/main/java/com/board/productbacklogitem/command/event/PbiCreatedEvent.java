@@ -1,5 +1,6 @@
 package com.board.productbacklogitem.command.event;
 
+import com.board.productbacklogitem.enumeration.PbiState;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class PbiCreatedEvent {
     private String functionalDescription;
     private String technicalDescription;
     private int priority;
-    private String state;
+    private PbiState state;
     private int storyPoint;
     private int businessValue;
     private LocalDateTime dueDate;

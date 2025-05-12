@@ -1,6 +1,7 @@
 package com.board.productbacklogitem.service;
 
 import com.board.productbacklogitem.dto.ProductBacklogItemDto;
+import com.board.productbacklogitem.enumeration.PbiState;
 import com.board.productbacklogitem.utils.service.NoContent;
 import com.board.productbacklogitem.utils.service.ServiceResponse;
 
@@ -43,6 +44,14 @@ public interface PbiService {
      * @return Create product backlog item
      */
     ServiceResponse<ProductBacklogItemDto> create(ProductBacklogItemDto model);
+
+    /**
+     *
+     * @param id - Product Backlog Item id
+     * @param state - Product Backlog Item state
+     * @return Update product backlog item
+     */
+    ServiceResponse<ProductBacklogItemDto> updateStatus(UUID id, PbiState state);
     /**
      *
      * @param model - Product Backlog Item Dto

@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(value = "feature-service", url = "${feature-service.url}", fallback = FeatureClientFallback.class)
+@FeignClient(
+        name = "feature-service",
+        url = "${feature-service.url}",
+       fallback = FeatureClientFallback.class
+)
 public interface FeatureClient {
     @GetMapping("/isExist/{id}")
-    public ServiceResponse<Boolean> isExist(@PathVariable UUID id);
+    ServiceResponse<Boolean> isExist(@PathVariable UUID id);
 }

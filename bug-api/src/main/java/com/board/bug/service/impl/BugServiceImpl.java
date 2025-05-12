@@ -5,6 +5,7 @@ import com.board.bug.client.SprintClient;
 import com.board.bug.configuration.mapper.Mapper;
 import com.board.bug.dto.BugDto;
 import com.board.bug.entity.Bug;
+import com.board.bug.enumeration.BugStatus;
 import com.board.bug.repository.BugRepository;
 import com.board.bug.service.BugService;
 import com.board.bug.utils.NoContent;
@@ -117,6 +118,21 @@ public class BugServiceImpl implements BugService {
         updateMembers(bug, model);
         Bug updatedBug = repository.save(bug);
         return ServiceResponse.success(mapper.toDto(updatedBug), 200);
+    }
+
+    /**
+     * Updates status of an existing bug in the system.
+     *
+     * @param id - id of the bug
+     * @param state - state of the bug
+     * @return ServiceResponse containing the updated BugDto and HTTP status 200
+     */
+    @Override
+    public ServiceResponse<BugDto> updateState(UUID id, BugStatus state) {
+        Bug bug = repository.findById(id).orElseThrow(EntityNotFoundException::new);
+        bug.setStatus(state);
+        Bug savedBug = repository.save(bug);
+        return ServiceResponse.success(mapper.toDto(savedBug), 200);
     }
 
     /**

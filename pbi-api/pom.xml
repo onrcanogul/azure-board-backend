@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.board</groupId>
@@ -84,8 +84,17 @@
 		<dependency>
 			<groupId>org.axonframework</groupId>
 			<artifactId>axon-spring-boot-starter</artifactId>
-			<version>4.9.3</version>
+			<version>4.9.2</version> <!-- ya da Spring Boot 3 ile uyumlu son sürüm -->
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.axonframework</groupId>
+			<artifactId>axon-server-connector</artifactId>
+			<version>4.9.2</version>
+		</dependency>
+
+
 
 	</dependencies>
 
@@ -94,12 +103,13 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>2022.0.5</version>
+				<version>2023.0.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 
 
 	<build>

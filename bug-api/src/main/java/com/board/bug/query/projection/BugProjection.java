@@ -2,6 +2,7 @@ package com.board.bug.query.projection;
 
 import com.board.bug.command.event.BugCreatedEvent;
 import com.board.bug.command.event.BugDeletedEvent;
+import com.board.bug.command.event.BugStatusUpdatedEvent;
 import com.board.bug.command.event.BugUpdatedEvent;
 import com.board.bug.dto.BugDto;
 import com.board.bug.service.BugService;
@@ -29,6 +30,11 @@ public class BugProjection {
         BugDto dto = new BugDto();
         BeanUtils.copyProperties(event, dto);
         service.update(dto);
+    }
+
+    @EventHandler
+    public void on(BugStatusUpdatedEvent event) {
+        service.updateState(event.getId(), event.getState());
     }
 
     @EventHandler
