@@ -22,5 +22,5 @@ server:
 
 team-service:
   url: "http://localhost:8086"
-feature-service:
+project-service:
   url: "http://localhost:8082"

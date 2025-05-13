@@ -40,7 +40,7 @@ public class PbiCommandController {
      */
     @PostMapping
     public ServiceResponse<NoContent> create(@RequestBody PbiCreatedCommand model) {
-        validations(model.getFeatureId(), model.getSprintId());
+//        validations(model.getFeatureId(), model.getSprintId());
         model.setId(UUID.randomUUID());
         commandGateway.sendAndWait(model);
         return ServiceResponse.success(201);
@@ -53,7 +53,7 @@ public class PbiCommandController {
      */
     @PutMapping
     public ServiceResponse<NoContent> update(@RequestBody PbiUpdateCommand model) {
-        validations(model.getFeatureId(), model.getSprintId());
+//        validations(model.getFeatureId(), model.getSprintId());
         commandGateway.sendAndWait(model);
         return ServiceResponse.success(200);
     }
