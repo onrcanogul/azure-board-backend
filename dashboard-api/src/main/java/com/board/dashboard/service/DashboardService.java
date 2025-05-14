@@ -1,6 +1,8 @@
 package com.board.dashboard.service;
 
 import com.board.dashboard.dto.*;
+import com.board.dashboard.response.BugResponse;
+import com.board.dashboard.response.PbiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -24,18 +26,18 @@ public class DashboardService {
     public Mono<DashboardDto> getDashboardBySprint(UUID sprintId) {
         WebClient webClient = WebClient.builder().build();
 
-        Mono<List<PbiDto>> pbItemsMono = webClient.get()
+        Mono<PbiResponse> pbItemsMono = webClient.get()
                 .uri(pbiServiceUrl + "/sprint/" + sprintId)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<PbiDto>>() {});
+                .bodyToMono(PbiResponse.class);
 
-        Mono<List<BugDto>> bugsMono = webClient.get()
+        Mono<BugResponse> bugsMono = webClient.get()
                 .uri(bugServiceUrl + "/sprint/" + sprintId)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<BugDto>>(){});
+                .bodyToMono(BugResponse.class);
 
         return Mono.zip(pbItemsMono, bugsMono)
-                .map(tuple -> new DashboardDto(tuple.getT1(), tuple.getT2()));
+                .map(tuple -> new DashboardDto(tuple.getT1().getPbis(), tuple.getT2().getBugs()));
 
     }
 
