@@ -1,0 +1,8 @@
+pbi-service:
+  url: "http://localhost:8080/api/pbi"
+
+bug-service:
+  url: "http://localhost:8081/api/bug"
+
+server:
+  port: 8087

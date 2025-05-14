@@ -56,6 +56,15 @@ public class BugQueryController {
         return ResponseEntity.ok(ServiceResponse.success(data, 200));
     }
 
+    @GetMapping("/sprint/{sprintId}")
+    public ResponseEntity<ServiceResponse<List<BugDto>>> getBySprint(@PathVariable UUID sprintId) {
+        List<BugDto> data = gateway
+                .query(new FindBySprintQuery(sprintId), ResponseTypes.multipleInstancesOf(BugDto.class))
+                .join();
+
+        return ResponseEntity.ok(ServiceResponse.success(data, 200));
+    }
+
     /**
      * Get Bugs by Tag
      */

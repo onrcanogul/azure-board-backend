@@ -16,6 +16,12 @@ public interface PbiService {
     ServiceResponse<List<ProductBacklogItemDto>> get();
     /**
      *
+     * @param sprintId - Sprint id
+     * @return Get all product backlog items by sprint id
+     */
+    ServiceResponse<List<ProductBacklogItemDto>> getBySprint(UUID sprintId);
+    /**
+     *
      * @param userId - Assigned User Id
      * @return Get all product backlog items by user id
      */

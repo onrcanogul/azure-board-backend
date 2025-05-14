@@ -56,6 +56,18 @@ public class BugServiceImpl implements BugService {
     }
 
     /**
+     * Retrieves all bugs assigned to a specific sprint.
+     *
+     * @param sprintId the ID of the sprint
+     * @return ServiceResponse containing a list of BugDto and HTTP status 200
+     */
+    @Override
+    public ServiceResponse<List<BugDto>> getBySprint(UUID sprintId) {
+        return ServiceResponse
+                .success(repository.findBySprintId(sprintId).stream().map(mapper::toDto).toList(), 200);
+    }
+
+    /**
      * Retrieves all bugs assigned to a specific user.
      *
      * @param userId the unique identifier of the user

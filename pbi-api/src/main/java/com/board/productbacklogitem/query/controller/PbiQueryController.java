@@ -45,6 +45,18 @@ public class PbiQueryController {
     }
 
     /**
+     * Get Product Backlog Item by ID
+     */
+    @GetMapping("/sprint/{sprintId}")
+    public ResponseEntity<ServiceResponse<List<ProductBacklogItemDto>>> getBySprint(@PathVariable UUID sprintId) {
+        List<ProductBacklogItemDto> data = queryGateway
+                .query(new FindBySprintQuery(sprintId), ResponseTypes.multipleInstancesOf(ProductBacklogItemDto.class))
+                .join();
+
+        return ResponseEntity.ok(ServiceResponse.success(data, 200));
+    }
+
+    /**
      * Get Product Backlog Items by Assigned User
      */
     @GetMapping("/user/{userId}")

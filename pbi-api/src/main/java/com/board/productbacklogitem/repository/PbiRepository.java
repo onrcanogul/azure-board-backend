@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface PbiRepository extends JpaRepository<ProductBacklogItem, UUID> {
     List<ProductBacklogItem> findByFeatureId(UUID featureId);
     List<ProductBacklogItem> findByAssignedUserId(UUID assignedUserId);
+    List<ProductBacklogItem> findBySprintId(UUID sprintId);
     @Query("SELECT pbi FROM ProductBacklogItem pbi WHERE :tagId MEMBER OF pbi.tagIds")
     List<ProductBacklogItem> findByTagId(UUID tagId);
 }

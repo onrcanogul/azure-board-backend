@@ -29,6 +29,14 @@ public interface BugService {
     ServiceResponse<BugDto> getById(UUID id);
 
     /**
+     * Retrieves all bugs assigned to a specific sprint.
+     *
+     * @param sprintId the ID of the sprint
+     * @return ServiceResponse containing a list of BugDto and HTTP status 200
+     */
+    ServiceResponse<List<BugDto>> getBySprint(UUID sprintId);
+
+    /**
      * Retrieves all bugs assigned to a specific user.
      *
      * @param userId the ID of the assigned user

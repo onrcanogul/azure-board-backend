@@ -42,6 +42,13 @@ public class PbiServiceImpl implements PbiService {
         return ServiceResponse
                 .success(repository.findAll().stream().map(mapper::toDto).toList(), 200);
     }
+
+    @Override
+    public ServiceResponse<List<ProductBacklogItemDto>> getBySprint(UUID sprintId) {
+        return ServiceResponse
+                .success(repository.findBySprintId(sprintId).stream().map(mapper::toDto).toList(), 200);
+    }
+
     /**
      *
      * @param userId - Assigned User Id

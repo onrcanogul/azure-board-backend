@@ -27,6 +27,15 @@ public class BugQueryHandler {
 
     /**
      *
+     * @return Get Bugs by Sprint
+     */
+    @QueryHandler
+    public List<BugDto> getBySprint(FindBySprintQuery query) {
+        return service.getBySprint(query.getSprintId()).getData();
+    }
+
+    /**
+     *
      * @return Get Bugs by User
      */
     @QueryHandler
