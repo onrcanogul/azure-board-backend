@@ -1,12 +1,18 @@
 package com.board.dashboard.dto;
 
 import com.board.dashboard.enumeration.BugStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class BugDto {
     private UUID id;
     private java.util.UUID sprintId;

@@ -45,8 +45,9 @@ public class PbiServiceImpl implements PbiService {
 
     @Override
     public ServiceResponse<List<ProductBacklogItemDto>> getBySprint(UUID sprintId) {
+        List<ProductBacklogItemDto> model = repository.findBySprintId(sprintId).stream().map(mapper::toDto).toList();
         return ServiceResponse
-                .success(repository.findBySprintId(sprintId).stream().map(mapper::toDto).toList(), 200);
+                .success(model, 200);
     }
 
     /**

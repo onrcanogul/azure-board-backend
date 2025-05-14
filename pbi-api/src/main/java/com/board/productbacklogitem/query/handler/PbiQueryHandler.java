@@ -27,7 +27,7 @@ public class PbiQueryHandler {
 
     @QueryHandler
     public List<ProductBacklogItemDto> getBySprint(FindBySprintQuery query) {
-        return service.get().getData();
+        return service.getBySprint(query.getSprintId()).getData();
     }
 
     /**

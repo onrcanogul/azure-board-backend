@@ -6,6 +6,7 @@ import com.board.dashboard.response.PbiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -28,16 +29,22 @@ public class DashboardService {
 
         Mono<PbiResponse> pbItemsMono = webClient.get()
                 .uri(pbiServiceUrl + "/sprint/" + sprintId)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(PbiResponse.class);
+                .bodyToMono(PbiResponse.class)
+                .doOnNext(data -> System.out.println("📦 Gelen veri: " + data))
+                .doOnError(e -> System.out.println("❌ Hata: " + e.getMessage()));;
 
         Mono<BugResponse> bugsMono = webClient.get()
                 .uri(bugServiceUrl + "/sprint/" + sprintId)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(BugResponse.class);
+                .bodyToMono(BugResponse.class)
+                .doOnNext(data -> System.out.println("📦 Gelen veri: " + data))
+                .doOnError(e -> System.out.println("❌ Hata: " + e.getMessage()));;
 
         return Mono.zip(pbItemsMono, bugsMono)
-                .map(tuple -> new DashboardDto(tuple.getT1().getPbis(), tuple.getT2().getBugs()));
+                .map(tuple -> new DashboardDto(tuple.getT1().getData(), tuple.getT2().getData()));
 
     }
 

@@ -64,6 +64,13 @@ spring:
           filters:
             - RewritePath=/team(?<segment>/?.*), /api/team${segment}
 
+        - id: dashboard-api
+          uri: http://localhost:8087
+          predicates:
+          - Path=/dashboard/**
+          filters:
+          - RewritePath=/dashboard(?<segment>/?.*), /api/dashboard${segment}
+
 logging:
   level:
     root: DEBUG

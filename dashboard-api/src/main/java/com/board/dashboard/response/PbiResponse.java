@@ -8,5 +8,8 @@ import java.util.List;
 
 @Data
 public class PbiResponse {
-    private List<PbiDto> pbis = new ArrayList<>();
+    private List<PbiDto> data = new ArrayList<>();
+    private Object errors;
+    private int statusCode;
+    private boolean successful;
 }
