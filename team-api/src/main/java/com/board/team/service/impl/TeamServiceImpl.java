@@ -21,7 +21,11 @@ public class TeamServiceImpl implements TeamService {
     private final Mapper<Team, TeamDto> mapper;
     private final ProjectClient projectClient;
 
-    public TeamServiceImpl(TeamRepository repository, Mapper<Team, TeamDto> mapper, @Qualifier("com.board.team.client.ProjectClient") ProjectClient projectClient) {
+    public TeamServiceImpl(
+            TeamRepository repository,
+            Mapper<Team, TeamDto> mapper,
+            @Qualifier("com.board.team.client.ProjectClient") ProjectClient projectClient
+    ) {
         this.repository = repository;
         this.mapper = mapper;
         this.projectClient = projectClient;
@@ -48,16 +52,16 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public ServiceResponse<TeamDto> create(TeamDto model) {
-        validations(model);
+        // validations(model);
         Team team = mapper.toEntity(model);
         team.setId(null);
         Team createdTeam = repository.save(team);
-        return ServiceResponse.success(mapper.toDto(team), 200);
+        return ServiceResponse.success(mapper.toDto(createdTeam), 200);
     }
 
     @Override
     public ServiceResponse<TeamDto> update(TeamDto model) {
-        validations(model);
+        // validations(model);
         Team team = repository.findById(model.getId()).orElseThrow();
         team.setName(model.getName());
         team.setDescription(model.getDescription());

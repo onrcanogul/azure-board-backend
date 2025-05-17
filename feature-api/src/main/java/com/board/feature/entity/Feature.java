@@ -21,7 +21,7 @@ public class Feature {
     private UUID id;
     private String title;
     private String description;
-    private UUID areaId;
+    private UUID teamId;
     private UUID epicId;
     private int priority;
     private LocalDateTime createdDate;

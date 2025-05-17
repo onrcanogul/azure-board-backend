@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "project-service", url = "project-service.url", fallback = ProjectClientFallback.class)
+@FeignClient(name = "project-service", url = "${project-service.url}", fallback = ProjectClientFallback.class)
 public interface ProjectClient {
     @GetMapping("/isExist/{id}")
     public ServiceResponse<Boolean> isExist(@PathVariable UUID id);

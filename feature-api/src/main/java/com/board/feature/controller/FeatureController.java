@@ -32,9 +32,9 @@ public class FeatureController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
-    @GetMapping("/area/{areaId}")
-    public ResponseEntity<ServiceResponse<List<FeatureDto>>> getByArea(@PathVariable UUID areaId) {
-        ServiceResponse<List<FeatureDto>> response = service.getByArea(areaId);
+    @GetMapping("/team/{teamId}")
+    public ResponseEntity<ServiceResponse<List<FeatureDto>>> getByArea(@PathVariable UUID teamId) {
+        ServiceResponse<List<FeatureDto>> response = service.getByArea(teamId);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 

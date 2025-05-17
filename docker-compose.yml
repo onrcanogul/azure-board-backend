@@ -131,7 +131,7 @@ services:
     ports:
       - "5438:5432"
     volumes:
-      - team_data:/var/lib/postgresql/data
+      - project_data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
       - pbi-net
@@ -161,6 +161,7 @@ volumes:
   feature_data:
   team_data:
   epic_data:
+  project_data:
   axonserver-data:
   axonserver-events:
   axonserver-config:

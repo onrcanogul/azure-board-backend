@@ -44,9 +44,9 @@ public class FeatureServiceImpl implements FeatureService {
     }
 
     @Override
-    public ServiceResponse<List<FeatureDto>> getByArea(UUID areaId) {
+    public ServiceResponse<List<FeatureDto>> getByArea(UUID teamId) {
         return ServiceResponse
-                .success(repository.findByAreaId(areaId).stream().map(mapper::toDto).toList(), 200);
+                .success(repository.findByTeamId(teamId).stream().map(mapper::toDto).toList(), 200);
     }
 
     @Override

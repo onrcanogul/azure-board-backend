@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface FeatureRepository extends JpaRepository<Feature, UUID> {
-    List<Feature> findByAreaId(UUID areaId);
+    List<Feature> findByTeamId(UUID teamId);
     List<Feature> findByEpicId(UUID epicId);
     @Query("select count(f) > 0 from Feature f where f.id = :id")
     boolean isExistById(@Param("id") UUID id);
